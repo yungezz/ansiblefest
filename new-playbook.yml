@@ -1,0 +1,13 @@
+- hosts: localhost
+  connection: local
+  vars:
+    app_name: ansible_app1
+    location: eastus
+    linux_plan_name: linux_appplan1
+    repo_url: https://github.com/yungezz/helloworld.git
+    workspace: ~/helloworld
+
+  roles:
+    - Azure.azure_preview_modules
+  
+  tasks:
