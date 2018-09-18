@@ -1,0 +1,33 @@
+# Description
+# ===========
+# This playbook creates below Azure resources:
+# - Azure container Instance
+# 
+# This playbook do:
+# - create Azure Container Instance, with image in Azure Container Registry pushed before.
+#
+- name: demo - part2
+  hosts: localhost
+  vars:
+    resource_group: ansiblefest-yungez1
+    location: eastus
+    registry_name: acrfest1
+    image_name: aci-helloworld
+    http_port: 80
+
+  tasks:
+    - name: Create Azure Container Instance
+      azure_rm_containerinstance:
+        resource_group: "{{ resource_group }}"
+        name: "{{ image_name }}"
+        ip_address: public
+        ports:
+          - "{{ http_port }}"
+        registry_login_server: "{{ registry_name }}.azurecr.io"
+        registry_username: "{{ registry_name }}"
+        registry_password: "{{ acr_result.credentials.password }}"
+        containers:
+          - name: "{{ image_name }}"
+            ports:
+              - "{{ http_port }}"
+            image: "{{ registry_name }}.azurecr.io/{{ image_name }}"
