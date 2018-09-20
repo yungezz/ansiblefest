@@ -3,44 +3,25 @@
 # This playbook creates below Azure resources:
 # - Azure container Registry
 # 
-# This playbook do:
-# 0. create Azure Container Registry
-# 1. git clone a hello world app
-# 2. build docker image
-# 3. push docker image to Azure Container Registry
-- name: demo - part1
+- name: demo - create Azure Container Registry
   hosts: localhost
   vars:
     resource_group: ansiblefest-yungez1
     location: eastus
     registry_name: acrfest1
-    repo_url: "https://github.com/Azure-Samples/aci-helloworld.git"
-    workspace: ~/src/aci-helloworld
-    image_name: aci-helloworld
   tasks:
-    - name: Git Clone
-      git:
-        repo: "{{ repo_url }}"
-        dest: "{{ workspace }}"
+
     - name: Create a resource group
       azure_rm_resourcegroup:
         name: "{{ resource_group }}"
         location: "{{ location }}"
+
     - name: Create Azure Container Registry
       azure_rm_containerregistry:
         resource_group: "{{ resource_group }}"
-        name: "{{ registry_name}}"
+        name: "{{ registry_name }}"
         admin_user_enabled: True
         sku: Standard
       register: acr_result
-    - name: Login docker registry
-      docker_login:
-        registry: "{{ registry_name }}.azurecr.io"
-        username: "{{ registry_name }}"
-        password: "{{ acr_result.credentials.password }}"
-    - name: Docker Build and Push
-      docker_image:
-        path: "{{ workspace }}"
-        name: "{{ registry_name }}.azurecr.io/{{ image_name }}"
-        push: yes
+
 
