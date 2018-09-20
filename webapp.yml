@@ -6,12 +6,13 @@
   connection: local
   vars:
     resource_group_name: ansiblefest-yungez-webapp
-    app_name: ansible_app1
+    plan_resource_group: ansiblewebapp-plan
+    app_name: webapp09201
     location: eastus
     linux_plan_name: linux_appplan1
 
-  roles:
-    - Azure.azure_preview_modules
+  # roles:
+  #   - Azure.azure_preview_modules
   
   tasks:
   - name: Create resource group
@@ -19,21 +20,26 @@
         name: "{{ resource_group_name }}"
         location: "{{ location }}"
 
+  - name: Create resource group for app service plan
+    azure_rm_resourcegroup:
+        name: "{{ plan_resource_group }}"
+        location: "{{ location }}"
+
   - name: Create a linux web app Java framework and Tomcat
     azure_rm_webapp:
         resource_group: "{{ resource_group_name }}"
         name: "{{ app_name }}"
         plan:
-          resource_group: "{{ resource_group_name }}"
+          resource_group: "{{ plan_resource_group }}"
           name: "{{ linux_plan_name }}"
           is_linux: true
           sku: S1
-          number_of_workers: 2
+          number_of_workers: 1
         app_settings:
           testkey: "testvalue"
         frameworks:
           - name: java
-            version: 8
+            version: "8"
             settings:
               java_container: "Tomcat"
               java_container_version: "8.5"
