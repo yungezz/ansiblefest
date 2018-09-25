@@ -8,7 +8,7 @@
   vars:
     resource_group: ansiblefest-yungez1
     location: eastus
-    registry_name: acrfest1
+    registry_name: acr0925
   tasks:
 
     - name: Create a resource group
@@ -22,6 +22,5 @@
         name: "{{ registry_name }}"
         admin_user_enabled: True
         sku: Standard
-      register: acr_result
 
 

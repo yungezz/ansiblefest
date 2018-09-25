@@ -14,7 +14,7 @@
   vars:
     resource_group: ansiblefest-yungez1
     location: eastus
-    registry_name: acrfest1
+    registry_name: acr0925
     image_name: aci-helloworld
     http_port: 80
     repo_url: "https://github.com/Azure-Samples/aci-helloworld.git"
@@ -30,10 +30,6 @@
         name: "{{ registry_name }}"
         retrieve_credentials: true
       register: acr_result
-
-    - name: dump out
-      debug:
-        var: acr_result
 
     - name: Git Clone
       git:
